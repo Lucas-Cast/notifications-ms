@@ -1,7 +1,6 @@
 from pydantic import Field
 
 from app.core.base_models import CamelCaseModel
-from app.models.enums.notification_type_enum import NotificationTypeEnum
 
 
 class CreateTemplateRequest(CamelCaseModel):
@@ -12,7 +11,7 @@ class CreateTemplateRequest(CamelCaseModel):
     variable_schema: dict[str, str] | None = Field(default=None)
     is_active: bool = Field(default=True)
 
-    notification_type_id: str = Field(default=NotificationTypeEnum.EMAIL)
+    notification_type_id: str
 
 
 class UpdateTemplateRequest(CamelCaseModel):
