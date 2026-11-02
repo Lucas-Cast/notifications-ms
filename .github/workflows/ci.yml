@@ -1,0 +1,45 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    tags: ['**']
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt ruff
+
+      - name: Lint
+        run: ruff check app
+
+      - name: Check Python syntax
+        run: python -m compileall -q app
+
+      - name: Trigger Render deploy
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$RENDER_DEPLOY_HOOK_URL" ]; then
+            echo 'Configure the RENDER_DEPLOY_HOOK_URL repository secret.' >&2
+            exit 1
+          fi
+          curl --fail --silent --show-error --max-time 30 --get \
+            --data-urlencode "ref=$GITHUB_SHA" --output /dev/null \
+            "$RENDER_DEPLOY_HOOK_URL"
