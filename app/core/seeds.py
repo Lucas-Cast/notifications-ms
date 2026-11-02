@@ -1,5 +1,3 @@
-from asyncio import gather
-
 from sqlalchemy.dialects.postgresql import insert
 
 from app.core.db import async_session_factory
@@ -25,5 +23,6 @@ async def run_seeds() -> None:
             insert(NotificationType).values(notif_types).on_conflict_do_nothing()
         )
 
-        await gather(session.exec(notif_status_stmt), session.exec(notif_types_stmt))
+        await session.exec(notif_status_stmt)
+        await session.exec(notif_types_stmt)
         await session.commit()
