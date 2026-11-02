@@ -1,4 +1,5 @@
 import asyncio
+from collections.abc import AsyncIterator
 
 from fastapi import Depends, FastAPI
 from fastapi.concurrency import asynccontextmanager
@@ -12,7 +13,7 @@ from app.workers.consumer import main as start_consumer
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
     await create_tables()
     await run_seeds()
 

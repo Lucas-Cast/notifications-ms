@@ -5,8 +5,8 @@ from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlmodel import SQLModel
 from sqlmodel.ext.asyncio.session import AsyncSession
 
+import app.models  # noqa: F401 - registers models with SQLModel metadata
 from app.core.settings import env_variables
-from app.models import *
 
 engine = create_async_engine(url=env_variables.pg_url)
 

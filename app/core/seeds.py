@@ -1,13 +1,15 @@
 from asyncio import gather
+
 from sqlalchemy.dialects.postgresql import insert
+
 from app.core.db import async_session_factory
-from app.models.entities.notification_type import NotificationType
 from app.models.entities.notification_status import NotificationStatus
+from app.models.entities.notification_type import NotificationType
 from app.models.enums.notification_status_enum import NotificationStatusEnum
 from app.models.enums.notification_type_enum import NotificationTypeEnum
 
 
-async def run_seeds():
+async def run_seeds() -> None:
     async with async_session_factory() as session:
         notif_statuses = [
             {"id": enum.value, "name": enum.value} for enum in NotificationStatusEnum

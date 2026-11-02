@@ -14,7 +14,7 @@ class CamelCaseModel(BaseModel):
 
 class BaseSQLModel(SQLModel):
     @declared_attr.directive
-    def __tablename__(cls) -> str:  # type: ignore
+    def __tablename__(cls) -> str:  # type: ignore  # noqa: N805
         name = cls.__name__
         snake_name = re.sub(r"(?<!^)(?=[A-Z])", "_", name).lower()
         return snake_name

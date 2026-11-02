@@ -1,5 +1,6 @@
 from fastapi_mail import ConnectionConfig
 from pydantic import SecretStr
+
 from app.core.settings import env_variables
 
 
