@@ -8,7 +8,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 import app.models  # noqa: F401 - registers models with SQLModel metadata
 from app.core.settings import env_variables
 
-engine = create_async_engine(url=env_variables.pg_url)
+engine = create_async_engine(url=env_variables.pg_url, pool_pre_ping=True)
 
 async_session_factory = async_sessionmaker(
     bind=engine,
