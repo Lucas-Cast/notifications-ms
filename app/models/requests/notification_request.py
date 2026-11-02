@@ -117,6 +117,32 @@ class BrevoEmailNotificationRequest(BaseNotificationRequest):
         return self
 
 
+class ResendEmailNotificationRequest(BaseNotificationRequest):
+    type: Literal[NotificationTypeEnum.RESEND_EMAIL]
+
+    resend_api_key: str = Field(min_length=1, pattern=r"\S", repr=False)
+    resend_from: str = Field(min_length=1, pattern=r"\S")
+    email_body: str | None = None
+    recipient_email: str
+    subject: str | None = None
+
+    @property
+    def body(self) -> str:
+        return self.email_body or ""
+
+    @property
+    def recipient(self) -> str:
+        return self.recipient_email
+
+    @model_validator(mode="after")
+    def validate_content(self) -> "ResendEmailNotificationRequest":
+        if self.template_id is None and (
+            self.email_body is None or self.subject is None
+        ):
+            raise ValueError("email_body and subject are required without template_id")
+        return self
+
+
 TNotificationRequest = TypeVar("TNotificationRequest", bound=BaseNotificationRequest)
 
 SendNotificationPayload = (
@@ -124,6 +150,7 @@ SendNotificationPayload = (
     | SMSNotificationRequest
     | WhatsappNotificationRequest
     | BrevoEmailNotificationRequest
+    | ResendEmailNotificationRequest
 )
 
 

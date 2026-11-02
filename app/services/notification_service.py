@@ -31,13 +31,12 @@ class NotificationService:
         payload = await self._apply_template(payload)
         log_id = await self.log_notification(payload)
 
-        json_payload = MessageBrokerPayload(
-            log_id=log_id, payload=payload
-        ).model_dump_json(by_alias=True)
+        broker_payload = MessageBrokerPayload(log_id=log_id, payload=payload)
+        json_payload = broker_payload.model_dump_json(by_alias=True)
 
         try:
             await self._broker.publish(json_payload)
-            return f"Published notification: {json_payload}"
+            return f"Published notification: {log_id}"
 
         except Exception as e:
             await self.update_log_status(

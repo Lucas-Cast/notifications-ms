@@ -3,6 +3,7 @@ from fastapi.openapi.models import Example
 from app.docs.dummies import (
     brevo_email_notification_dummy,
     email_notification_dummy,
+    resend_email_notification_dummy,
     sms_notification_dummy,
     whatsapp_notification_dummy,
 )
@@ -27,5 +28,10 @@ send_notification_examples = {
         summary="Send Email via Brevo",
         description="Example payload for sending an Email using Brevo API.",
         value=brevo_email_notification_dummy,
+    ),
+    "Resend Email Example": Example(
+        summary="Send Email via Resend",
+        description="Example payload for sending an Email using Resend API.",
+        value=resend_email_notification_dummy,
     ),
 }

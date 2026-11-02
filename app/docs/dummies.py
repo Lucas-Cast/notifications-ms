@@ -4,6 +4,7 @@ from app.models.enums.notification_type_enum import NotificationTypeEnum
 from app.models.requests.notification_request import (
     BrevoEmailNotificationRequest,
     EmailNotificationRequest,
+    ResendEmailNotificationRequest,
     SMSNotificationRequest,
     WhatsappNotificationRequest,
 )
@@ -41,6 +42,15 @@ brevo_email_notification_dummy = BrevoEmailNotificationRequest(
     type=NotificationTypeEnum.BREVO_EMAIL,
     template_id="template-id-example",
     template_variables={"nome": "Example User"},
+    recipient_email="email@example.com",
+    subject="Subject Example",
+    email_body="<h1>Email body content...</h1>",
+).model_dump(by_alias=True)
+
+resend_email_notification_dummy = ResendEmailNotificationRequest(
+    type=NotificationTypeEnum.RESEND_EMAIL,
+    resend_api_key="re_your_api_key",
+    resend_from="Name <email@seudominio.com>",
     recipient_email="email@example.com",
     subject="Subject Example",
     email_body="<h1>Email body content...</h1>",
